@@ -145,7 +145,7 @@ The directory to which save the visualization could be set in the ```.yaml``` fi
 ### Animation examples
 
 * The transparency level of the gold box represents the temporal attention variation for each predicted motion word selected based on adaptive attention. 
-* The disque joint represents the level of spatial attention weight for each keypoint.
+* The disk radius of each keypoint indicates the magnitude of the corresponding spatial attention weight.
 
 
 [//]: # (<div align="center">)
