@@ -1,0 +1,54 @@
+#program : train_wandb.py
+method: grid
+metric:
+  goal: maximize
+  name: bleu_val
+
+parameters:
+  hidden_size:
+    values: [256]
+
+  embedding_dim:
+    values: [128]
+
+  hidden_dim:
+    values: [256]
+
+  lr:
+    values: [0.0005]
+
+  weight_decay:
+    value : 0.00001
+
+  batch_size:
+    value : 128
+
+  lambdas : # (l_spat,l_adapt)
+    values : [[0.1,3]] #[0,0],[3,3]
+
+  num_layers:
+    value : 1
+
+  min_freq:
+    value : 3
+
+  teacher_force_ratio:
+    value : 0.5
+
+  device:
+    value : "cuda"
+
+  rate_dropout:
+    value: 0.5
+
+  n_epochs:
+    value : 70
+
+  optimizer:
+    value : adamW
+
+  attention_type:
+    value: relative_bahdanau
+
+  K:
+    value : 6

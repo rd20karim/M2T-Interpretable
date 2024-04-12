@@ -1,0 +1,18 @@
+input_type: cartesian
+encoder_type: None
+attention_type:  relative_bahdanau
+batch_size: 1024
+embedding_dim:  64
+hidden_size: 64
+hidden_dim:  128
+device : cpu
+K: 6
+lr: 0.003
+mask: True
+D: 3
+min_freq: 3
+num_layers: 1
+rate_dropout: 0.5
+teacher_force_ratio: 0.5
+save_results : h128
+path : /media/Baie-MD1400/data/karim/wandb_int/Interpretable_MC_kit/model_62rm831j
