@@ -156,7 +156,7 @@ class seq2seq(nn.Module):
 
 
         if self.beam_size==1:
-            # TODO USE FULL TEACHER FORCING TO SPEED UP TRAINING AND GET OUT THIS LOOP !
+
             for j in range(trg_len-1):
                 # ------- CLIP COIN
                 thr = random.random()

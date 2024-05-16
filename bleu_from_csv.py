@@ -13,8 +13,6 @@ from nltk.translate import meteor_score
 from nltk.corpus.reader.wordnet import  WordNetCorpusReader
 from bert_score import score
 
-#from nlgeval import NLGEval,compute_metrics
-
 def read_pred_refs(path,split=True,tokenize=True):
     predictions = []
     references = []
@@ -119,22 +117,6 @@ def compute_bert_score(predictions,references,device="cpu"):
     P,R,F1 = score(predictions,references,lang='en',rescale_with_baseline=True,idf=True,device=device)
     _bert_sc = F1.mean().item()
     return _bert_sc
-def bleu_rouge_cider_dict(predictions,references):
-    with open("hyp_temp.txt",'w') as f:
-        f.writelines(predictions)
-    for i, refs in enumerate(references):
-        with open(f"./temp/ref_{i}.txt","w") as f:
-            f.write('\n'.join(refs))
-    nlg_eval = NLGEval(
-        metrics_to_omit=['METEOR','EmbeddingAverageCosineSimilarity','SkipThoughtCS','VectorExtremaCosineSimilarity','GreedyMatchingScore'])
-    return compute_metrics("hyp_temp.txt",[f"./temp/ref_{i}.txt" for i in range(len(references))])
-def bleu_rouge_cider_dict_2(predictions,references):
-    nlg_eval = NLGEval(
-        metrics_to_omit=['METEOR','EmbeddingAverageCosineSimilarity','SkipThoughtCS','VectorExtremaCosineSimilarity','GreedyMatchingScore'])
-    ref_list = [list(refs) for refs in zip(*references)]
-    cand_list = predictions
-    return nlg_eval.compute_metrics(ref_list, cand_list)
-
 
 def write_first_beam_and_refs(name_file,path,path_refs):
     _, refs = read_pred_refs(path_refs, tokenize=False)
@@ -150,12 +132,11 @@ def write_first_beam_and_refs(name_file,path,path_refs):
 if __name__=="__main__":
 
     name_file = 'LSTM_h3D_preds_[0, 3]_beam_size_2' #'LSTM_kit_preds_[2, 3]_beam_size_3'#
+    abs_path = r"C:\Users\karim\PycharmProjects\M2T-Interpretable"
+    path = abs_path + "/Predictions/"+name_file+'.csv'
+    path_refs = abs_path + "/Predictions/LSTM_h3D_preds_[0, 3].csv"
 
-    path = "/home/karim/PycharmProjects/m2LSpTemp/src/Predictions/"+name_file+'.csv'
-    path_refs = "/home/karim/PycharmProjects/m2LSpTemp/src/Predictions/LSTM_h3D_preds_[0, 3].csv"
-
-    write_first_beam_and_refs("./src/temp/"+name_file,path,path_refs)
-
+    write_first_beam_and_refs(abs_path+"/src/temp/"+name_file,path,path_refs)
 
 
     # predictions,references = read_pred_refs(path_refs,tokenize=False)
@@ -171,41 +152,3 @@ if __name__=="__main__":
     # bleu_score = calculate_bleu(pa,ra,num_grams=4)
     # df_bleu_ = bleu_to_df(pa,ra,smooth_method=SmoothingFunction().method0)
     #
-    #
-
-    nlg_eval = NLGEval(
-        metrics_to_omit=['METEOR',
-                         'EmbeddingAverageCosineSimilarity' ,
-                         'SkipThoughtCS',
-                         'VectorExtremaCosineSimilarity',
-                         'GreedyMatchingScore']
-    )
-
-    # from collections import OrderedDict
-    # def evaluate_bleu_rouge_cider(text_loaders, file):
-    #     bleu_score_dict = OrderedDict({})
-    #     rouge_score_dict = OrderedDict({})
-    #     cider_score_dict = OrderedDict({})
-    #     # print(text_loaders.keys())
-    #     print('========== Evaluating NLG Score ==========')
-    #     for text_loader_name, text_loader in text_loaders.items():
-    #
-    #         ref_list = [list(refs) for refs in zip(*text_loader.dataset.all_caption_list)]
-    #         cand_list = text_loader.dataset.generated_texts_list
-    #         scores = nlg_eval.compute_metrics(ref_list, cand_list)
-    #         bleu_score_dict[text_loader_name] = np.array(
-    #             [scores['Bleu_1'], scores['Bleu_2'], scores['Bleu_3'], scores['Bleu_4']])
-    #         rouge_score_dict[text_loader_name] = scores['ROUGE_L']
-    #         cider_score_dict[text_loader_name] = scores['CIDEr']
-    #
-    #         line = f'---> [{text_loader_name}] BLEU: '
-    #         for i in range(4):
-    #             line += '(%d): %.4f ' % (i + 1, scores['Bleu_%d' % (i + 1)])
-    #         print(line)
-    #         print(line, file=file, flush=True)
-    #
-    #         print(f'---> [{text_loader_name}] ROUGE_L: {scores["ROUGE_L"]:.4f}')
-    #         print(f'---> [{text_loader_name}] ROUGE_L: {scores["ROUGE_L"]:.4f}', file=file, flush=True)
-    #         print(f'---> [{text_loader_name}] CIDER: {scores["CIDEr"]:.4f}')
-    #         print(f'---> [{text_loader_name}] CIDER: {scores["CIDEr"]:.4f}', file=file, flush=True)
-    #     return bleu_score_dict, rouge_score_dict, cider_score_dict

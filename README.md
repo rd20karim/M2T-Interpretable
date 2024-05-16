@@ -64,10 +64,10 @@ For both HumanML3D and KIT-MLD (augmented versions) you can follow the steps her
 
 You can download the best models here: [models_weights](https://drive.google.com/drive/folders/1LiirfvZsU5FX1SgNQ1Y6xMeAt52lbVX6?usp=sharing)
 
-| Dataset               | Human-ML3D | Human-ML3D | Human-ML3D | KIT-ML    | KIT-ML     | KIT-ML   |
-|-----------------------|------------|------------|------------|-----------|------------|----------|
-| Run ID                | ge2gc507   | v6tv9rsx   | hnjlc7r6   | u8qatt2y  |  ton5mfwh  | lupw04om |
-| Attention supervision | [0,0]      | [2,3]      | [3,3]      | [0,0]     | [2,3]      | [1,3]    |
+| Dataset               | Human-ML3D | Human-ML3D | Human-ML3D | Human-ML3D | KIT-ML    | KIT-ML   | KIT-ML    | KIT-ML   |
+|-----------------------|------------|------------|------------|------------|-----------|----------|-----------|----------|
+| Run ID                | ge2gc507   | ba9hhkji   | v6tv9rsx   | hnjlc7r6   | u8qatt2y  | yxitfbp7 | ton5mfwh  | lupw04om |
+| Attention supervision | [0,0]      | [0,3]      | [2,3]      | [3,3]      | [0,0]     | [0,3]    | [2,3]     | [1,3]    |
 
 Attention supervision parameters respectively refers to spatial and adaptive attention guidance weights.
 
@@ -103,13 +103,6 @@ python train_wandb.py --config {config_path} --dataset_name {dataset_name}
 ```
 
 
-
-
-[//]: # ()
-[//]: # (As described in the paper [Hal]&#40;https://hal.science/hal-04251363v1&#41; according to ``&#40;l_spat,l_adapt&#41;`` values:)
-
-[//]: # (* No attention supervision: ``&#40;0,0&#41;`` and Spatial or Adaptive:``&#40;l_spat ,l_adapt&#41;``)
-
 * The config path specify the model to train and the hyperparameters to experiment, other values can be added by changing the config file of the chosen model
 * SEED is fixed to ensure same model initialization across runs for reproducibility.
 * Replace variables ``project_path`` and ``aug_path`` with your absolute data paths. 
@@ -137,7 +130,7 @@ python nlg_evaluation.py
 Generate skeleton animation and attention maps (adaptive+spatio-temporal):
 
 ```
-python visualizations/poses2concepts.py --path PATH --attention_type ATTENTION_TYPE --n_map NUMBER_ATTENTION_MAP --n_gifs NUMBER_3D_ANIMATIONS --save_results DIRECTORY_SAVE_PLOTS
+python visualizations/visu_word_attentions.py --path PATH --n_map NUMBER_ATTENTION_MAP --n_gifs NUMBER_3D_ANIMATIONS --save_results DIRECTORY_SAVE_PLOTS
 ```
 
 The directory to which save the visualization could be set in the ```.yaml``` file for evaluation or given as argument ```--save_results path```
@@ -147,19 +140,6 @@ The directory to which save the visualization could be set in the ```.yaml``` fi
 * The transparency level of the gold box represents the temporal attention variation for each predicted motion word selected based on adaptive attention. 
 * The disk radius of each keypoint indicates the magnitude of the corresponding spatial attention weight.
 
-
-[//]: # (<div align="center">)
-
-[//]: # ()
-[//]: # (<img src="./visualizations/readme/attention_sample_55.gif" alt="GIF 1" width="250" height="250">)
-
-[//]: # (<img src="./visualizations/readme/attention_sample_69.gif" alt="GIF 2" width="250" height="250">)
-
-[//]: # (<img src="./visualizations/readme/attention_sample_95.gif" alt="GIF 3" width="250" height="250">)
-
-[//]: # (<img src="./visualizations/readme/attention_sample_2.gif" alt="GIF 3" width="250" height="250">)
-
-[//]: # (</div>)
 
 
 <div align="center">
@@ -171,6 +151,10 @@ The directory to which save the visualization could be set in the ```.yaml``` fi
 
 
 ## Interpretability analysis
+
+<div align="center">
+<img src="./visualizations/readme/interpretablity_applications.png" alt="GIF 1" width="540" height="249">
+</div>
 
 The following steps can be explored for interpret-ability analysis:
 
@@ -220,5 +204,5 @@ This script will print the BLEU-4 score for each beam and write beam predictions
 
 ## License 
 
-This code is distributed under MIT LICENSE.
+This code is distributed under [MIT LICENSE](https://github.com/rd20karim/M2T-Interpretable?tab=MIT-1-ov-file).
 

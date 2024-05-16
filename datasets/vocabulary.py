@@ -30,8 +30,6 @@ class vocabulary():
             #contextualSpellCheck.add_to_pipe(self.spacy_eng)
             self.context_sentence_correction()
         elif self.correct_tokens:
-            # Correction don't take account the context but more fast
-            #self.token_correction(ask_user)
             pass
         else:
             self.corrected_sentences = self.sentences[:] # independent copy
@@ -48,7 +46,6 @@ class vocabulary():
             # no correction made conserve the original description
             else:
                 self.corrected_sentences.append(desc)
-
 
     def build_vocabulary(self, min_freq=1):
         self.token_to_idx = {"<pad>": 0, "<sos>": 1, "<eos>": 2, "<unk>": 3}
@@ -72,7 +69,8 @@ class vocabulary():
         sp_count = len(sp_token) # count special tokens
         # sanity check
         assert self.vocab_size ==len(self.token_freq)+sp_count
-        # with open("./kit_vocab.txt", mode='w') as fw:
+
+        # with open("./dataset_vocab.txt", mode='w',encoding='utf-8') as fw:
         #     for key, value in self.token_freq.items():
         #         fw.write("%s:%s\n" % (key, value))
 
@@ -95,7 +93,8 @@ class vocabulary():
         # Note that self.idx_to_token don't have the same length as self.token_to_idx when  min_freq !=1
 
         self.vocab_size_unk  = len(self.idx_to_token)
-
+        logging.info(f"The vocab size is {self.vocab_size}"
+                     f" with minimum frequency of {min_freq} it becomes --> {self.vocab_size_unk} tokens")
         # Verify if we have successive int indexes of tokens
         idxs = set(self.token_to_idx.values())
         try:

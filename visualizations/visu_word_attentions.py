@@ -146,6 +146,7 @@ if __name__=="__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--path",type=str,help="Path of model weights not used if the config file is passed")
     parser.add_argument("--dataset_name",type=str,default="h3D",choices=["h3D","kit"])
+    parser.add_argument("--run_id",type=str,default="h3D",choices=["h3D","kit"])
     parser.add_argument("--kind",type=str,default="map",choices=["map","hist",'adapt','all'])
     parser.add_argument("--config",type=str,default="../configs/lstm_eval_h3D.yaml")
     parser.add_argument("--device",type=str,default="cpu")
@@ -163,19 +164,21 @@ if __name__=="__main__":
     parser.add_argument("--batch_size", type=int, default=1024, help='Batch size should be >= to length of data to not have a variable BLEU score')
     parser.add_argument("--n_map",type=int,default=10,required=False,help="Number of attention map to generate")
     parser.add_argument("--n_gifs",type=int,default=100,help="Number of animation to generate")
-    parser.add_argument("--root_trajectory_sample",type=int,default=-1,help="Plot trajectory")
     parser.add_argument("--save_results",type=str,help="Directory where to save generated plots")
     # parser.add_argument("--start",type=int,default=0,help="Start sample index generation point")
     # parser.add_argument('--indexs',type=int, nargs='+', help='word indexes')
     # parser.add_argument('--spat',type=int, nargs='+', help='sample indexes')
 
     args = parser.parse_args()
-
     home_path = r"C:\Users\karim\PycharmProjects"
-    abs_path_project = home_path + "\m2LSpTemp"
+    abs_path_project = home_path + "\M2T-Interpretable"
 
-    run_id =  'ton5mfwh'
-    args.dataset_name = 'kit'
+    # # Fix manually ---------------------------------------------------------------------------------
+    # run_id =  'ton5mfwh'
+    # args.dataset_name = 'kit'
+
+    run_id = args.run_id
+
     args.path = abs_path_project + f"\models\Interpretable_MC_{args.dataset_name}_f\model_{run_id}"
 
     # From the loaded model -------------------------------------------------------------------
@@ -224,8 +227,6 @@ if __name__=="__main__":
     for idp, part in enumerate(body_parts):
         intensity[:,:,:,part] = spat_temp[:,:,:,idp:idp+1]
 
-    # Isolate root from Torso for HumanML3D
-    intensity[:, :, :, 0] = spat_temp[:, :, :, 0]
 
     # --------------------------- Human Pose 3D Animation ---------------------------------------------------------
 
@@ -233,7 +234,7 @@ if __name__=="__main__":
       pred = preds[id_sample]
       bleus = [bleu_score([pred], [[ref]]) for ref in trgs[id_sample]]
       id_best_ref = np.argmax(bleus)
-      if np.max(bleus)>=.3:
+      if np.max(bleus)>=.3: # Select predictions above a threshold
           trg = trgs[id_sample][id_best_ref]
           trg = ' '.join(trg)
           start_pad = lens[id_sample]
