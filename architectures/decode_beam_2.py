@@ -31,8 +31,6 @@ class BeamSearchNode(object):
         self.att_position = att_position
     def eval(self, alpha=1.0):
         reward = 0
-        # Add here a function for shaping a reward
-
         return self.logp / float(self.leng - 1 + 1e-6) + alpha * reward
 
 
@@ -50,18 +48,16 @@ def beam_decode(self,target_tensor, decoder_hiddens, encoder_outputs=None):
     decoded_batch = []
     dec_pred_output = []
 
-
     # decoding goes sentence by sentence
     target_tensor = target_tensor.permute(1,0)
     B = target_tensor.size(0) # batch_size
-    #TODO REMOVE DEBUG PARAM IN THE FINALE VESION
-    debug_param = B
+
     #  ------------ Spatial-Temp pose feature : R # shape  : (T,N,V,C)
     T, N, CV = self.x.size()
     R = encoder_outputs.reshape(T, N, 6 * self.hidden_size).to(self.device)
 
     # TODO CHANGE THIS CODE  TO DECODE PER BATCH
-    for idx in range(debug_param):
+    for idx in range(B):
         #x = xparts #shape[T,B,K,D] (k=6) (D=feature_dimension)
         x = self.x[:,idx,:].unsqueeze(1)
         enc_masks = torch.zeros((x.shape[0],1)) # (seq_len,batch_size)
@@ -100,7 +96,6 @@ def beam_decode(self,target_tensor, decoder_hiddens, encoder_outputs=None):
         qsize = 1
         # start beam search
         while True:
-        #for idx in range(trg_len-1):
             # give up when decoding takes too long
             if qsize > 100: break
             # fetch the best node
@@ -138,7 +133,7 @@ def beam_decode(self,target_tensor, decoder_hiddens, encoder_outputs=None):
 
             # ------ TEMPORAL ATTENTION shape : (T,N,V*C)--------------------------------------------------------
             ep_t = self.temporal_att(torch.tanh(
-                self.tempfeat_extract_hdec(bot_ht_1).expand(x.size()[:2] + (hidden_dim,)) + self.feat_extract_g(R)))  # +self.speed_temp(velocity)))
+                self.tempfeat_extract_hdec(bot_ht_1).expand(x.size()[:2] + (hidden_dim,)) + self.feat_extract_g(R)))
             ep_t = ep_t.masked_fill(enc_masks.unsqueeze(-1).to(self.device) == 0, float('-inf'))
             b_t = torch.softmax(ep_t, dim=0)
 
@@ -172,9 +167,6 @@ def beam_decode(self,target_tensor, decoder_hiddens, encoder_outputs=None):
             decoder_hidden = (bot_ht_1,bot_mt_1,top_ht_1,top_mt_1)
 
             """--------------------------------- END MODEL PREDICTION--------------------------------"""
-            #TODO ADAPT
-            # decoder_logits, decoder_hidden = self.dec(torch.tensor([[decoder_input]],device=self.device), decoder_hidden, encoder_output,enc_masks)
-
             decoder_output = torch.log_softmax(decoder_logits,axis=-1)
             # PUT HERE REAL BEAM SEARCH OF TOP
             log_prob, indexes = torch.topk(decoder_output.squeeze(0), beam_width)
@@ -214,9 +206,3 @@ def beam_decode(self,target_tensor, decoder_hiddens, encoder_outputs=None):
         decoded_batch.append(utterances)
 
     return decoded_batch
-
-if __name__=="__main__":
-    hidden_size = 64
-    embedding_dim = 64
-    #decoder = seq2seq(642, hidden_size, embedding_dim, num_layers=1, device=device,
-    #                  bidirectional=False, attention="local", mask=True, beam_size=2).to(device)

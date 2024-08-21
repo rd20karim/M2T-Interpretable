@@ -24,7 +24,7 @@ def load_model_config(args= None,device=None):
         path_txt = project_path+"\datasets\sentences_corrections.csv"
         path_motion = aug_path+"\kit_with_splits_2023.npz"
 
-        # -----------  H3D IMPORTS   ---------------------
+        # -----------  [H3D IMPORTS]   ---------------------
     elif args.dataset_name=="h3D":
         from architectures.LSTM_h3D import seq2seq
         from datasets.h3d_m2t_dataset_ import dataset_class
@@ -55,12 +55,12 @@ def evaluate(loaded_model,data_loader,mode,multiple_references=False,name_file=N
     loaded_model.eval()
     epoch_loss = 0
     output_per_batch,target_per_batch = [],[]
-    name_file = f"./Predictions/LSTM_{args.dataset_name}_{name_file}_{args.lambdas}"
-    BLEU_scores = []
-    with open(name_file + ".csv", mode="w") as _:pass
-    logging.info(f"Compute BLEU scores per batch and write predictions/refs to {name_file}")
     loaded_model.eval()
     if beam_size==1:
+        name_file = f"./Predictions/LSTM_{args.dataset_name}_{name_file}_{args.lambdas}"
+        BLEU_scores = []
+        with open(name_file + ".csv", mode="w") as _:pass
+        logging.info(f"Compute BLEU scores per batch and write predictions/refs to {name_file}")
         for i, batch in enumerate(data_loader):
             loss_b,bleu_score_4,pred,refs = run_batch(model=loaded_model,batch=batch,data_loader=data_loader,mode=mode,teacher_force_ratio=0,
                                                           device=device,multiple_references=multiple_references,attention_type=args.attention_type)
@@ -88,7 +88,7 @@ def evaluate(loaded_model,data_loader,mode,multiple_references=False,name_file=N
 
     else:
         logging.info("START BEAM SEARCHING")
-        file_save_beam = f"./Predictions/LSTM_{args.dataset_name}_preds_{args.lambdas}_beam_size_{beam_size}.csv"
+        file_save_beam = f"./Predictions/LSTM_{args.dataset_name}_{name_file}_{args.lambdas}_beam_size_{beam_size}.csv"
         with open(file_save_beam,'w'): pass #create the file
         beam_bleus = [[] for _ in range(beam_size)]
         for i, batch in enumerate(data_loader):

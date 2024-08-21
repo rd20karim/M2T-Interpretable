@@ -1,12 +1,13 @@
 ## Description
 
-Official implementation of our paper for interpretable motion to text generation:
+[BMVC 2024] Official implementation of our paper for interpretable motion to text generation:
 
 <div align="center">
 
-[<span style="font-size: 25px;">Guided Attention for Interpretable Motion Captioning</span>](https://hal.science/hal-04251363v1) 
+[<span style="font-size: 25px;">Guided Attention for Interpretable Motion Captioning (BMVC 2024)</span>](https://hal.science/hal-04251363v1) 
 
 [![arxiv](https://img.shields.io/badge/arXiv-Motion_to_Text-red?logo=arxiv)](https://arxiv.org/abs/2310.07324v1)
+[![BMVC](https://img.shields.io/badge/BMVC2024-gold)](https://bmvc2024.org/programme/accepted_papers/)
 [![License](https://img.shields.io/badge/License-MIT-green)]()
 
 </div>
@@ -20,13 +21,11 @@ Official implementation of our paper for interpretable motion to text generation
 If you find this code or paper useful in your work, please cite:
 
 ```
-@article{radouane2023guided,
+@INPROCEEDINGS{radouane2024guided,
       title={Guided Attention for Interpretable Motion Captioning}, 
       author={Karim Radouane and Andon Tchechmedjiev and Sylvie Ranwez and Julien Lagarde},
-      year={2023},
-      eprint={2310.07324},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV}
+      booktitle = {Proceedings of the 35th British Machine Vision Conference},
+      year={2024}
 }
 ```
 
@@ -130,6 +129,7 @@ python nlg_evaluation.py
 Generate skeleton animation and attention maps (adaptive+spatio-temporal):
 
 ```
+set PYTHONPATH=Project_Absolute_Path
 python visualizations/visu_word_attentions.py --path PATH --n_map NUMBER_ATTENTION_MAP --n_gifs NUMBER_3D_ANIMATIONS --save_results DIRECTORY_SAVE_PLOTS
 ```
 
