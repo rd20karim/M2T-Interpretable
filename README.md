@@ -7,7 +7,7 @@
 [<span style="font-size: 25px;">Guided Attention for Interpretable Motion Captioning (BMVC 2024)</span>](https://hal.science/hal-04251363v1) 
 
 [![arxiv](https://img.shields.io/badge/arXiv-Motion_to_Text-red?logo=arxiv)](https://arxiv.org/abs/2310.07324v1)
-[![BMVC](https://img.shields.io/badge/BMVC2024-gold)](https://bmvc2024.org/programme/accepted_papers/)
+[![BMVC](https://img.shields.io/badge/Poster-BMVC2024-gold)](https://drive.google.com/file/d/1tFXVelTfzJ2Fb3OadiDJIxEoDvFu36NK/view)
 [![License](https://img.shields.io/badge/License-MIT-green)]()
 
 </div>
